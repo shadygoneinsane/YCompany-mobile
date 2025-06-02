@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.SignInButton
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.ycompany.R
+import com.ycompany.SignInViewModel
 import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
@@ -27,6 +29,10 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var credentialManager: CredentialManager
     val db: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
+    }
+
+    val signInViewModel: SignInViewModel by lazy {
+        ViewModelProvider(this)[SignInViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
