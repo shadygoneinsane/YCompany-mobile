@@ -14,4 +14,8 @@
     <string name="your_trusted_source_for_electronics">Your trusted source for electronics.</string>
     <string name="welcome_to_ycompany">Welcome to Ycompany</string>
     <string name="ycompany_logo">Ycompany Logo</string>
+
+    <string name="product_image">Product image</string>
+    <string name="menu_products">Products</string>
+    <string name="menu_orders">Orders</string>
 </resources>
