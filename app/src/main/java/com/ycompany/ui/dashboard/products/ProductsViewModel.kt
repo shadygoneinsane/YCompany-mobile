@@ -27,6 +27,9 @@ class ProductsViewModel @Inject constructor(
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
+    private val _cart = MutableStateFlow<List<com.ycompany.data.model.Product>>(emptyList())
+    val cart = _cart.asStateFlow()
+
     init {
         loadProducts()
     }
@@ -89,5 +92,57 @@ class ProductsViewModel @Inject constructor(
             .add(order)
             .addOnSuccessListener { onResult(true, "Order placed successfully") }
             .addOnFailureListener { e -> onResult(false, e.localizedMessage ?: "Order failed") }
+    }
+
+    fun addToCart(product: com.ycompany.data.model.Product) {
+        _cart.value = _cart.value + product
+    }
+
+    fun clearCart() {
+        _cart.value = emptyList()
+    }
+
+    fun placeAllOrders(onResult: (Boolean, String) -> Unit) {
+        val user = auth.currentUser
+        if (user == null) {
+            onResult(false, "User not logged in")
+            return
+        }
+        val productsToOrder = _cart.value
+        if (productsToOrder.isEmpty()) {
+            onResult(false, "Cart is empty")
+            return
+        }
+        var successCount = 0
+        var failCount = 0
+        var lastMessage = ""
+        productsToOrder.forEach { product ->
+            val order = Order(
+                userId = user.uid,
+                userName = user.displayName ?: "",
+                userEmail = user.email ?: "",
+                productId = product.id,
+                productName = product.name,
+                productPrice = product.price,
+                productImageUrl = product.imageUrl,
+                orderTime = Timestamp.now()
+            )
+            firestore.collection(Constants.COLLECTION_ORDERS)
+                .add(order)
+                .addOnSuccessListener {
+                    successCount++
+                    if (successCount + failCount == productsToOrder.size) {
+                        clearCart()
+                        onResult(true, "${successCount} order(s) placed successfully")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    failCount++
+                    lastMessage = e.localizedMessage ?: "Order failed"
+                    if (successCount + failCount == productsToOrder.size) {
+                        onResult(false, lastMessage)
+                    }
+                }
+        }
     }
 }

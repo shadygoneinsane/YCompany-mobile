@@ -1,38 +1,37 @@
 package com.ycompany.ui.dashboard.orders
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ycompany.R
 import com.ycompany.data.model.Order
+import com.ycompany.databinding.FragmentOrdersBinding
+import com.ycompany.ui.base.BaseFragment
 import kotlinx.coroutines.launch
-import android.widget.TextView
 
-class OrdersFragment : Fragment() {
+class OrdersFragment : BaseFragment<FragmentOrdersBinding>() {
     private lateinit var viewModel: OrdersViewModel
     private lateinit var adapter: OrdersAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_orders, container, false)
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentOrdersBinding.inflate(inflater, container, false)
+
+    override fun initViews() {
+        viewModel = ViewModelProvider(this)[OrdersViewModel::class.java]
+        adapter = OrdersAdapter()
+        binding.recyclerOrders.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerOrders.adapter = adapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[OrdersViewModel::class.java]
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_orders)
-        adapter = OrdersAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
+    override fun setupObservers() {
         lifecycleScope.launch {
             viewModel.orders.collect { orderList ->
+                binding.ordersPlaceholder.isVisible = orderList.isEmpty()
                 adapter.submitList(orderList)
             }
         }

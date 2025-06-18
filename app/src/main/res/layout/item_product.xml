@@ -20,11 +20,12 @@
         android:id="@+id/tv_product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Product Name"
         android:layout_marginHorizontal="16dp"
+        android:text="Product Name"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_product_price"
+        app:layout_constraintEnd_toStartOf="@id/btnAddToCart"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/img_product"
         app:layout_constraintTop_toTopOf="@id/img_product" />
@@ -36,16 +37,21 @@
         android:text="₹999.00"
         android:textColor="#757575"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_product"
         app:layout_constraintEnd_toEndOf="@id/tv_product_name"
         app:layout_constraintStart_toStartOf="@id/tv_product_name"
         app:layout_constraintTop_toBottomOf="@id/tv_product_name" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Order"
-        app:cornerRadius="16dp"
-        android:layout_gravity="end"/>
+    <ImageButton
+        android:id="@+id/btnAddToCart"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end"
+        android:background="@android:color/transparent"
+        android:contentDescription="Add to cart"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="@+id/img_product"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_product" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

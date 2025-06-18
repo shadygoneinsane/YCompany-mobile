@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.ycompany.R
@@ -17,6 +19,8 @@ import com.ycompany.ui.dashboard.products.ProductsFragment
 class DashboardActivity : BaseActivity<ActivityDashboardBinding, ViewModel>(ViewModel::class) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.bg_light) // or white
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
         initBindingAndViewModel(R.layout.activity_dashboard)
         setSupportActionBar(binding.toolbar)
 

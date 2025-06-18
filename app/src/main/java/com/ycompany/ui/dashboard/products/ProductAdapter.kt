@@ -5,17 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ImageButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ycompany.R
 import com.ycompany.data.model.Product
-import com.google.android.material.button.MaterialButton
 
 class ProductAdapter(
     private val onProductClick: (Product) -> Unit,
-    private val onOrderClick: (Product) -> Unit
+    private val onAddToCart: (Product) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -29,7 +29,7 @@ class ProductAdapter(
         private val imgProduct: ImageView = itemView.findViewById(R.id.img_product)
         private val tvName: TextView = itemView.findViewById(R.id.tv_product_name)
         private val tvPrice: TextView = itemView.findViewById(R.id.tv_product_price)
-        private val btnOrder: MaterialButton = itemView.findViewById(R.id.btnOrder)
+        private val btnAddToCart: ImageButton = itemView.findViewById(R.id.btnAddToCart)
 
         fun bind(product: Product) {
             tvName.text = product.name
@@ -41,8 +41,8 @@ class ProductAdapter(
             itemView.setOnClickListener {
                 onProductClick(product)
             }
-            btnOrder.setOnClickListener {
-                onOrderClick(product)
+            btnAddToCart.setOnClickListener {
+                onAddToCart(product)
             }
         }
     }

@@ -2,6 +2,7 @@ package com.ycompany.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +57,6 @@ class SignInFragment : Fragment() {
             }
         }
 
-
-
         binding.googleSignInButton.setOnClickListener {
             googleSignInCallback?.invoke()
         }
@@ -76,10 +75,12 @@ class SignInFragment : Fragment() {
                             binding.loading.visibility = View.GONE
                             BaseSnackBar.showSuccess(binding.root, state.message)
                         }
+
                         is SignInState.Error -> {
                             binding.loading.visibility = View.GONE
                             BaseSnackBar.showError(binding.root, state.message)
                         }
+
                         SignInState.Proceed -> {
                             binding.loading.visibility = View.GONE
                             // Navigation to dashboard should be handled by the activity or a callback
@@ -91,7 +92,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun isValidEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     override fun onDestroyView() {
