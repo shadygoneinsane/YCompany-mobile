@@ -3,6 +3,8 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="prompt_display_name">Display Name</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome!"</string>
@@ -18,4 +20,41 @@
     <string name="product_image">Product image</string>
     <string name="menu_products">Products</string>
     <string name="menu_orders">Orders</string>
+    
+    <!-- Sign In related strings -->
+    <string name="error_google_sign_in_not_found">No Google sign-ins found on this device. Please add an account.</string>
+    <string name="error_firebase_auth_failed">Firebase authentication failed</string>
+    <string name="error_firestore_failed">Failed to save user data</string>
+    <string name="success_welcome_message">Welcome %s</string>
+    <string name="log_tag_sign_in">SignIn</string>
+    <string name="log_tag_google_sign_in">GoogleSignIn</string>
+    
+    <!-- Products related strings -->
+    <string name="no_products_found">No products found</string>
+    <string name="product_clicked">Product clicked: %s</string>
+    <string name="error_loading_products">Error loading products</string>
+    <string name="error_unknown">Unknown error occurred</string>
+    <string name="product_not_found">Product not found</string>
+    <string name="product_price_format">₹%.2f</string>
+    
+    <!-- SnackBar Action Buttons -->
+    <string name="action_ok">OK</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_learn_more">Learn More</string>
+    <string name="action_sign_out">Sign Out</string>
+    <string name="success_signed_out">Signed out successfully</string>
+
+    <string name="action_sign_up">Sign up</string>
+    <string name="or">OR</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+
+    <string name="google_play_services_not_available">Google Play Services is not available</string>
+    <string name="error_google_sign_in_not_available">Google Sign-In not available. Please check your Google Play Services.</string>
+    <string name="error_google_sign_in_failed">Google Sign-In failed: %1$s</string>
+    <string name="error_setting_up_google_sign_in">Error setting up Google Sign-In</string>
+
+    <string name="tab_sign_in">Sign In</string>
+    <string name="tab_sign_up">Sign Up</string>
 </resources>

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:padding="12dp">
 
     <ImageView
         android:id="@+id/img_product"
@@ -12,31 +12,40 @@
         android:layout_height="64dp"
         android:contentDescription="@string/product_image"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Product Name"
-        android:textStyle="bold"
+        android:layout_marginHorizontal="16dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/img_product"
-        app:layout_constraintTop_toTopOf="@id/img_product"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/img_product"
+        app:layout_constraintTop_toTopOf="@id/img_product" />
 
     <TextView
         android:id="@+id/tv_product_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="₹999.00"
-        android:textSize="14sp"
         android:textColor="#757575"
-        app:layout_constraintTop_toBottomOf="@id/tv_product_name"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_product_name"
         app:layout_constraintStart_toStartOf="@id/tv_product_name"
-        app:layout_constraintEnd_toEndOf="@id/tv_product_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_product_name" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order"
+        app:cornerRadius="16dp"
+        android:layout_gravity="end"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

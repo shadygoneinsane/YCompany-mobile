@@ -1,6 +1,6 @@
 package com.ycompany.data.model
 
-class Product(
+data class Product(
     val id: String = "",
     val name: String = "",
     val price: Double = 0.0,

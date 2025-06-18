@@ -1,20 +1,93 @@
 package com.ycompany.ui.dashboard.products
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.ycompany.data.model.Product
+import com.ycompany.data.Resource
+import com.ycompany.ui.base.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.ycompany.data.model.Order
+import com.ycompany.data.Constants
+import com.google.firebase.Timestamp
 
-class ProductsViewModel : ViewModel() {
+@Singleton
+class ProductsViewModel @Inject constructor(
+    private val repository: ProductsRepository
+) : BaseViewModel() {
 
-    private val repo = ProductsRepository()
+    private val _state = MutableStateFlow<ProductsState>(ProductsState.Loading)
+    val state: StateFlow<ProductsState> = _state.asStateFlow()
 
-    private val _products = MutableLiveData<List<Product>>()
-    val products: LiveData<List<Product>> = _products
+    private val _effect = MutableStateFlow<ProductsEffect?>(null)
+    val effect: StateFlow<ProductsEffect?> = _effect.asStateFlow()
 
-    fun loadProducts() {
-        repo.getProducts { result ->
-            _products.postValue(result)
+    private val firestore = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
+    init {
+        loadProducts()
+    }
+
+    fun handleEvent(event: ProductsEvent) {
+        when (event) {
+            is ProductsEvent.LoadProducts -> loadProducts()
+            is ProductsEvent.ProductClicked -> handleProductClick(event.product)
         }
+    }
+
+    private fun loadProducts() {
+        launchWithExceptionHandler {
+            _state.value = ProductsState.Loading
+            
+            when (val result = repository.getProducts()) {
+                is Resource.Success -> {
+                    val products = result.data
+                    _state.value = if (products.isEmpty()) {
+                        ProductsState.Empty
+                    } else {
+                        ProductsState.Success(products)
+                    }
+                }
+                is Resource.Error -> {
+                    _state.value = ProductsState.Error(result.message)
+                }
+                is Resource.Loading -> {
+                    _state.value = ProductsState.Loading
+                }
+            }
+        }
+    }
+
+    private fun handleProductClick(product: com.ycompany.data.model.Product) {
+        _effect.value = ProductsEffect.NavigateToProductDetail(product)
+    }
+
+    fun clearEffect() {
+        _effect.value = null
+    }
+
+    fun placeOrder(product: com.ycompany.data.model.Product, onResult: (Boolean, String) -> Unit) {
+        val user = auth.currentUser
+        if (user == null) {
+            onResult(false, "User not logged in")
+            return
+        }
+        val order = Order(
+            userId = user.uid,
+            userName = user.displayName ?: "",
+            userEmail = user.email ?: "",
+            productId = product.id,
+            productName = product.name,
+            productPrice = product.price,
+            productImageUrl = product.imageUrl,
+            orderTime = Timestamp.now()
+        )
+        firestore.collection(Constants.COLLECTION_ORDERS)
+            .add(order)
+            .addOnSuccessListener { onResult(true, "Order placed successfully") }
+            .addOnFailureListener { e -> onResult(false, e.localizedMessage ?: "Order failed") }
     }
 }

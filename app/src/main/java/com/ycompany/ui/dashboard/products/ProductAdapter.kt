@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ycompany.R
 import com.ycompany.data.model.Product
+import com.google.android.material.button.MaterialButton
 
-class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
+class ProductAdapter(
+    private val onProductClick: (Product) -> Unit,
+    private val onOrderClick: (Product) -> Unit
+) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Product>() {
@@ -25,13 +29,21 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DI
         private val imgProduct: ImageView = itemView.findViewById(R.id.img_product)
         private val tvName: TextView = itemView.findViewById(R.id.tv_product_name)
         private val tvPrice: TextView = itemView.findViewById(R.id.tv_product_price)
+        private val btnOrder: MaterialButton = itemView.findViewById(R.id.btnOrder)
 
         fun bind(product: Product) {
             tvName.text = product.name
-            tvPrice.text = "₹${product.price}"
+            tvPrice.text = itemView.context.getString(R.string.product_price_format, product.price)
 
             Glide.with(itemView.context).load(product.imageUrl)
                 .placeholder(R.drawable.ic_placeholder).into(imgProduct)
+                
+            itemView.setOnClickListener {
+                onProductClick(product)
+            }
+            btnOrder.setOnClickListener {
+                onOrderClick(product)
+            }
         }
     }
 
