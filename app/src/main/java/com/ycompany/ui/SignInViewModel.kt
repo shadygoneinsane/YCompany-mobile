@@ -7,6 +7,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.ycompany.R
 import com.ycompany.data.AuthRepository
 import com.ycompany.data.Constants
@@ -28,6 +29,12 @@ class SignInViewModel @Inject constructor(
     
     private val _signInState = MutableStateFlow<SignInState>(SignInState.Idle)
     val signInState: StateFlow<SignInState> = _signInState
+
+    private var analytics: FirebaseAnalytics? = null
+
+    fun setAnalytics(analytics: FirebaseAnalytics) {
+        this.analytics = analytics
+    }
 
     fun firebaseAuthWithGoogle(idToken: String) {
         _signInState.value = SignInState.Loading
@@ -111,6 +118,7 @@ class SignInViewModel @Inject constructor(
                     val user = result.data
                     _signInState.value = SignInState.Success(resourceProvider.getString(R.string.success_welcome_message, user.displayName ?: email))
                     _signInState.value = SignInState.Proceed
+                    analytics?.logEvent(FirebaseAnalytics.Event.LOGIN, null)
                 }
                 is Resource.Error -> {
                     _signInState.value = SignInState.Error(result.message)
@@ -132,6 +140,7 @@ class SignInViewModel @Inject constructor(
                     user?.updateProfile(com.google.firebase.auth.UserProfileChangeRequest.Builder().setDisplayName(displayName).build())
                         ?.addOnCompleteListener {
                             saveInDb(user, displayName)
+                            analytics?.logEvent(FirebaseAnalytics.Event.SIGN_UP, null)
                         }
                 }
                 is Resource.Error -> {

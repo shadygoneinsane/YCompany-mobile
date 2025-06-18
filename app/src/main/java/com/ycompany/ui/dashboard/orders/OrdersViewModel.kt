@@ -5,12 +5,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ycompany.data.Constants
 import com.ycompany.data.model.Order
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class OrdersViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
@@ -22,7 +22,7 @@ class OrdersViewModel : ViewModel() {
         val user = auth.currentUser ?: return
         CoroutineScope(Dispatchers.IO).launch {
             val snapshot = firestore.collection(Constants.COLLECTION_ORDERS)
-                .whereEqualTo("userId", user.uid)
+                .whereEqualTo(Constants.FIELD_USER_ID, user.uid)
                 .get().await()
             val orderList = snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
             _orders.value = orderList

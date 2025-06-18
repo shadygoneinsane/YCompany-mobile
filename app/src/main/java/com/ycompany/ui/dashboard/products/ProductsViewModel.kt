@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.ycompany.data.model.Order
 import com.ycompany.data.Constants
 import com.google.firebase.Timestamp
+import com.google.firebase.analytics.FirebaseAnalytics
 
 @Singleton
 class ProductsViewModel @Inject constructor(
@@ -29,6 +30,8 @@ class ProductsViewModel @Inject constructor(
 
     private val _cart = MutableStateFlow<List<com.ycompany.data.model.Product>>(emptyList())
     val cart = _cart.asStateFlow()
+
+    private var analytics: FirebaseAnalytics? = null
 
     init {
         loadProducts()
@@ -131,6 +134,7 @@ class ProductsViewModel @Inject constructor(
                 .add(order)
                 .addOnSuccessListener {
                     successCount++
+                    analytics?.logEvent("place_order", null)
                     if (successCount + failCount == productsToOrder.size) {
                         clearCart()
                         onResult(true, "${successCount} order(s) placed successfully")
@@ -144,5 +148,9 @@ class ProductsViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun setAnalytics(analytics: FirebaseAnalytics) {
+        this.analytics = analytics
     }
 }

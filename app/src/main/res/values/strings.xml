@@ -58,4 +58,5 @@
     <string name="tab_sign_in">Sign In</string>
     <string name="tab_sign_up">Sign Up</string>
     <string name="orders_will_be_shown_here">Orders will be shown here.</string>
+    <string name="ordered_on">Ordered on: %1$s</string>
 </resources>

@@ -12,25 +12,26 @@ object Constants {
     const val FIELD_EMAIL = "email"
     const val FIELD_PHOTO_URL = "photoUrl"
     const val FIELD_LAST_LOGIN = "lastLogin"
-    
+    const val FIELD_USER_ID = "userId"
+
     // Product Fields
     const val FIELD_PRODUCT_ID = "id"
     const val FIELD_PRODUCT_NAME = "name"
     const val FIELD_PRODUCT_PRICE = "price"
     const val FIELD_PRODUCT_IMAGE_URL = "imageUrl"
-    
+
     // Shared Preferences
     const val PREF_NAME = "YCompanyPrefs"
     const val PREF_USER_ID = "user_id"
     const val PREF_USER_NAME = "user_name"
     const val PREF_USER_EMAIL = "user_email"
     const val PREF_IS_LOGGED_IN = "is_logged_in"
-    
+
     // Navigation
     const val EXTRA_PRODUCT_ID = "product_id"
     const val EXTRA_PRODUCT = "product"
     const val EXTRA_USER_ID = "user_id"
-    
+
     // Error Messages
     const val ERROR_UNKNOWN = "Unknown error occurred"
     const val ERROR_PRODUCT_NOT_FOUND = "Product not found"

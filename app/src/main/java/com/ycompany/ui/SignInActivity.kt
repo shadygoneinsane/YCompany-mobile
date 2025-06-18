@@ -10,26 +10,30 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.ycompany.R
+import com.ycompany.YCompanyApp
 import com.ycompany.databinding.ActivitySignInBinding
 import com.ycompany.ui.base.BaseActivity
 import com.ycompany.ui.base.BaseSnackBar
 import com.ycompany.ui.dashboard.DashboardActivity
+import com.ycompany.ui.dashboard.products.ProductsViewModel
 import com.ycompany.ui.events.SignInState
 import kotlinx.coroutines.launch
-import com.google.android.material.tabs.TabLayoutMediator
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 
 class SignInActivity : BaseActivity<ActivitySignInBinding, SignInViewModel>(SignInViewModel::class),
     SignInFragment.GoogleSignInHandler {
 
     private lateinit var credentialManager: CredentialManager
+    private lateinit var productsViewModel: ProductsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,12 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInViewModel>(Sign
         credentialManager = CredentialManager.create(this)
         window.statusBarColor = ContextCompat.getColor(this, R.color.bg_light) // or white
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+
+        val analytics = FirebaseAnalytics.getInstance(this)
+        viewModel.setAnalytics(analytics)
+        val viewModelFactory = (application as YCompanyApp).appComponent.viewModelFactory()
+        productsViewModel = ViewModelProvider(this, viewModelFactory)[ProductsViewModel::class.java]
+        productsViewModel.setAnalytics(analytics)
 
         val tabLayout = binding.authTabLayout
         val viewPager = binding.authViewPager
@@ -51,7 +61,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInViewModel>(Sign
             }
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = if (position == 0) getString(R.string.action_sign_in_short) else getString(R.string.action_sign_up)
+            tab.text =
+                if (position == 0) getString(R.string.action_sign_in_short) else getString(R.string.action_sign_up)
         }.attach()
         setupObservers()
     }

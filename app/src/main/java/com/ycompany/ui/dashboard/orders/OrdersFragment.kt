@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ycompany.R
 import com.ycompany.data.model.Order
 import com.ycompany.databinding.FragmentOrdersBinding
 import com.ycompany.ui.base.BaseFragment
@@ -58,7 +59,7 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrderViewHolder>() {
             val text1 = itemView.findViewById<TextView>(android.R.id.text1)
             val text2 = itemView.findViewById<TextView>(android.R.id.text2)
             text1.text = order.productName
-            text2.text = "Ordered on: ${order.orderTime}"
+            text2.text = text2.context.getString(R.string.ordered_on, order.orderTime)
         }
     }
 }
